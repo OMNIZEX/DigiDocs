@@ -46,7 +46,9 @@ namespace DigiDocs.Controllers
             };
             _context.Users.Add(newUser);
             _context.SaveChanges();
-            return Ok(new { message = "Registration successful", userId = newUser.Id });
+            return Ok (new { message = "Registration successful", userId = newUser.Id });
+
+
         }
     }
 
