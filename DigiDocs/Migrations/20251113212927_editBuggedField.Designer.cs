@@ -4,6 +4,7 @@ using DigiDocs.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DigiDocs.Migrations
 {
     [DbContext(typeof(DigidocsContext))]
-    partial class DigidocsContextModelSnapshot : ModelSnapshot
+    [Migration("20251113212927_editBuggedField")]
+    partial class editBuggedField
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -179,9 +182,6 @@ namespace DigiDocs.Migrations
                         .HasColumnType("decimal(18, 2)")
                         .HasColumnName("PAmountToPay");
 
-                    b.Property<int?>("PatientQueueId")
-                        .HasColumnType("int");
-
                     b.Property<string>("PchronicDisease")
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("PChronicDisease");
@@ -279,29 +279,6 @@ namespace DigiDocs.Migrations
                     b.HasIndex("PatientId");
 
                     b.ToTable("PatientMedications");
-                });
-
-            modelBuilder.Entity("DigiDocs.Models.PatientQueue", b =>
-                {
-                    b.Property<int>("PatientQueueId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PatientQueueId"));
-
-                    b.Property<int>("PatientId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
-
-                    b.HasKey("PatientQueueId")
-                        .HasName("PK_PatientQueue");
-
-                    b.HasIndex("PatientId")
-                        .IsUnique();
-
-                    b.ToTable("PatientQueues");
                 });
 
             modelBuilder.Entity("DigiDocs.Models.PatientSymptom", b =>
@@ -507,18 +484,6 @@ namespace DigiDocs.Migrations
                     b.Navigation("Patient");
                 });
 
-            modelBuilder.Entity("DigiDocs.Models.PatientQueue", b =>
-                {
-                    b.HasOne("DigiDocs.Models.PatientDatum", "Patient")
-                        .WithOne("PatientQueue")
-                        .HasForeignKey("DigiDocs.Models.PatientQueue", "PatientId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired()
-                        .HasConstraintName("FK_PatientQueue_PatientData");
-
-                    b.Navigation("Patient");
-                });
-
             modelBuilder.Entity("DigiDocs.Models.PatientSymptom", b =>
                 {
                     b.HasOne("DigiDocs.Models.Examination", "Examination")
@@ -578,8 +543,6 @@ namespace DigiDocs.Migrations
                     b.Navigation("Diagnoses");
 
                     b.Navigation("PatientMedications");
-
-                    b.Navigation("PatientQueue");
 
                     b.Navigation("PatientSymptoms");
                 });
