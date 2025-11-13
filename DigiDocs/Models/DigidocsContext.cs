@@ -31,8 +31,22 @@ public partial class DigidocsContext : DbContext
 
     public virtual DbSet<User> Users { get; set; }
 
+    public virtual DbSet<PatientQueue> PatientQueues { get; set; }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.Entity<PatientQueue>( entity =>
+        {
+            entity.HasKey(e => e.PatientQueueId).HasName("PK_PatientQueue");
+            entity.Property(e => e.Status)
+                .IsRequired();
+
+            entity.HasOne(d => d.Patient).WithOne(p => p.PatientQueue)
+                .HasForeignKey<PatientQueue>(d => d.PatientId)
+                .OnDelete(DeleteBehavior.NoAction)
+                .HasConstraintName("FK_PatientQueue_PatientData");
+        });
+
         modelBuilder.Entity<Diagnosis>(entity =>
         {
             entity.HasKey(e => e.DiagnosisId).HasName("PK__Diagnose__0C54CC733224B3AA");
@@ -98,12 +112,12 @@ public partial class DigidocsContext : DbContext
             entity.Property(e => e.PphoneNumber)
                 .HasMaxLength(20)
                 .HasColumnName("PPhoneNumber");
-            entity.Property(e => e.Ppriority)
-                .HasMaxLength(50)
-                .HasColumnName("PPriority");
-            entity.Property(e => e.PserviceType)
-                .HasMaxLength(100)
-                .HasColumnName("PServiceType");
+            //entity.Property(e => e.Ppriority)
+            //    .HasMaxLength(50)
+            //    .HasColumnName("PPriority");
+            //entity.Property(e => e.PserviceType)
+            //    .HasMaxLength(100)
+            //    .HasColumnName("PServiceType");
 
             entity.HasOne(d => d.Examination).WithMany(p => p.PatientData)
                 .HasForeignKey(d => d.ExaminationId)
