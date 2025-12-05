@@ -4,48 +4,147 @@ using System.ComponentModel.DataAnnotations;
 
 namespace DigiDocs.dtos
 {
-    public class MedicationDto
+    #region Examination DTOs
+
+    public class DoctorExaminationCreateDto
+    {
+        [Required]
+        public int PatientId { get; set; }
+
+        public int? userId { get; set; }
+    }
+
+    public class DoctorCompleteExaminationDto
+    {
+        [Required]
+        public int ExaminationId { get; set; }
+
+        /// <summary>
+        /// List of symptom IDs to associate with this examination
+        /// </summary>
+        public List<int>? Symptoms { get; set; }
+
+        /// <summary>
+        /// Clinical diagnosis text
+        /// </summary>
+        public string? ClinicalDiagnosis { get; set; }
+
+        /// <summary>
+        /// Required investigations text (e.g., MRI, CT Scan, Blood tests)
+        /// </summary>
+        public string? RequiredInvestigations { get; set; }
+
+        /// <summary>
+        /// List of medications to prescribe
+        /// </summary>
+        public List<DoctorMedicationDto>? Medications { get; set; }
+
+        /// <summary>
+        /// Optional next appointment date
+        /// </summary>
+        public DateTime? NextAppointmentDate { get; set; }
+
+        public int? userId { get; set; }
+    }
+
+    public class DoctorMedicationDto
     {
         [Required]
         public int MedicineId { get; set; }
 
-        [MaxLength(200)]
+        [Required]
         public string Dosage { get; set; }
 
-        [MaxLength(200)]
+        [Required]
         public string Frequency { get; set; }
     }
 
-    public class SymptomDto
-    {
-        [Required]
-        public int SymptomId { get; set; }
-    }
+    #endregion
 
-    public class DoctorExaminationDto
+    #region Symptom DTOs
+
+    public class DoctorPatientSymptomCreateDto
     {
-        // Required: the patient this examination belongs to
         [Required]
         public int PatientId { get; set; }
 
-        // Optional: if client wants to update an existing examination
-        public int? ExaminationId { get; set; }
+        [Required]
+        public int SymptomId { get; set; }
 
-        // Optional lists
-        public List<SymptomDto> Symptoms { get; set; } = new List<SymptomDto>();
-        public List<MedicationDto> Medications { get; set; } = new List<MedicationDto>();
+        [Required]
+        public int ExaminationId { get; set; }
 
-        // Diagnosis fields
-        [MaxLength(4000)]
+        public int? userId { get; set; }
+    }
+
+    #endregion
+
+    #region Diagnosis DTOs
+
+    public class DoctorDiagnosisCreateDto
+    {
+        [Required]
+        public int PatientId { get; set; }
+
+        [Required]
+        public int ExaminationId { get; set; }
+
+        [Required]
         public string ClinicalDiagnosis { get; set; }
 
-        [MaxLength(4000)]
-        public string RequiredInvestigations { get; set; }
+        public string? RequiredInvestigations { get; set; }
 
-        // Next appointment for the patient (optional)
-        public DateTime? NextAppointment { get; set; }
-
-        // Audit: set by client for now but should come from authenticated user in future
-        public int? UserId { get; set; }
+        public int? userId { get; set; }
     }
+
+    public class DoctorDiagnosisUpdateDto
+    {
+        [Required]
+        public string ClinicalDiagnosis { get; set; }
+
+        public string? RequiredInvestigations { get; set; }
+
+        public int? userId { get; set; }
+    }
+
+    #endregion
+
+    #region Medication/Prescription DTOs
+
+    public class DoctorPatientMedicationCreateDto
+    {
+        [Required]
+        public int PatientId { get; set; }
+
+        [Required]
+        public int MedicineId { get; set; }
+
+        [Required]
+        public string Dosage { get; set; }
+
+        [Required]
+        public string Frequency { get; set; }
+
+        [Required]
+        public int ExaminationId { get; set; }
+
+        public int? userId { get; set; }
+    }
+
+    #endregion
+
+    #region Appointment DTOs
+
+    public class DoctorAppointmentCreateDto
+    {
+        [Required]
+        public int PatientId { get; set; }
+
+        [Required]
+        public DateTime AppointmentDate { get; set; }
+
+        public int? userId { get; set; }
+    }
+
+    #endregion
 }
